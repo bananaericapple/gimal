@@ -8,7 +8,8 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-const basename = import.meta.env.BASE_URL || '/';
+const baseUrl = import.meta.env.BASE_URL || '/';
+const basename = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) || '/' : baseUrl;
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
