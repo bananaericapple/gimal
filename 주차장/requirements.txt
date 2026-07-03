@@ -1,4 +1,0 @@
-ultralytics
-opencv-python
-firebase-admin
-numpy
