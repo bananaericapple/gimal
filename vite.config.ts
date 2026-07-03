@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
-  const base = '/test_my_ReactProject/';
+  const base = '/gimal/';
 
   return {
     server: {
