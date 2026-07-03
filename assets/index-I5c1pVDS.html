@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Flowers - Interactive Canvas</title>
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --accent-color: #4ade80;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            color: var(--text-color);
+            user-select: none;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            font-size: 2rem;
+            opacity: 0.8;
+            pointer-events: auto;
+        }
+
+        #guide-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.3);
+            transition: opacity 0.5s ease;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            pointer-events: auto;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        canvas {
+            display: block;
+            touch-action: none;
+        }
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>Draw Flowers</h1>
+        <div id="guide-text">Click To Add Flowers</div>
+        <div id="controls">
+            <button class="btn" id="clear-btn">Clear Canvas</button>
+        </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        /**
+         * Draw Flowers - Interactive Frontend Code
+         */
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clear-btn');
+        const guideText = document.getElementById('guide-text');
+
+        let width, height, dpr;
+        let flowers = [];
+        let time = 0;
+
+        // Configuration constants
+        const GROWTH_SPEED = 0.015;
+        const BLOOM_SPEED = 0.025;
+        const WIND_STRENGTH = 0.002;
+        const STEM_SEGMENTS = 20;
+
+        /**
+         * Handle resizing with devicePixelRatio for sharp rendering
+         */
+        function resize() {
+            dpr = window.devicePixelRatio || 1;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        /**
+         * Helper: Random number in range
+         */
+        const random = (min, max) => Math.random() * (max - min) + min;
+
+        /**
+         * Flower Class
+         */
+        class Flower {
+            constructor(startX) {
+                this.startX = startX;
+                this.baseY = height;
+                this.targetHeight = random(height * 0.4, height * 0.75);
+                this.thickness = random(2, 5);
+                
+                // Stem appearance
+                const hue = random(80, 140); // Greens
+                const sat = random(40, 70);
+                const light = random(30, 50);
+                this.stemColor = `hsl(${hue}, ${sat}%, ${light}%)`;
+                
+                // Animation states
+                this.growProgress = 0;
+                this.bloomProgress = 0;
+                this.phase = random(0, Math.PI * 2);
+                this.swayFactor = random(0.5, 1.2);
+
+                // Stem curve logic (Control points)
+                this.cp1x = random(-60, 60);
+                this.cp2x = random(-100, 100);
+
+                // Flower properties
+                const fHue = random(0, 360);
+                const isSpecialPalette = Math.random() > 0.3;
+                // Pink/Purple/Orange/Yellow palettes
+                const palettes = [
+                    [320, 350], // Pink
+                    [260, 290], // Purple
+                    [15, 45],   // Orange
+                    [45, 65]    // Yellow
+                ];
+                const selectedPalette = palettes[Math.floor(Math.random() * palettes.length)];
+                this.flowerHue = random(selectedPalette[0], selectedPalette[1]);
+                
+                this.petalCount = Math.floor(random(4, 8));
+                this.petalSize = random(20, 45);
+                this.petalWidthRatio = random(0.4, 0.8);
+                this.flowerRotation = random(-0.3, 0.3);
+            }
+
+            /**
+             * Calculate the stem point at a given progress t [0, 1]
+             * Uses a cubic bezier logic with current swaying
+             */
+            getStemPoint(t) {
+                const sway = Math.sin(time * 0.001 + this.phase) * (t * 20) * this.swayFactor;
+                
+                // Cubic Bezier calculation
+                // P0 = (startX, baseY)
+                // P1 = (startX + cp1x, baseY - targetHeight * 0.33)
+                // P2 = (startX + cp2x, baseY - targetHeight * 0.66)
+                // P3 = (startX, baseY - targetHeight)
+                
+                const p0 = { x: this.startX, y: this.baseY };
+                const p1 = { x: this.startX + this.cp1x + sway * 0.5, y: this.baseY - this.targetHeight * 0.33 };
+                const p2 = { x: this.startX + this.cp2x + sway, y: this.baseY - this.targetHeight * 0.66 };
+                const p3 = { x: this.startX + sway * 1.5, y: this.baseY - this.targetHeight };
+
+                const cx = 3 * (p1.x - p0.x);
+                const bx = 3 * (p2.x - p1.x) - cx;
+                const ax = p3.x - p0.x - cx - bx;
+
+                const cy = 3 * (p1.y - p0.y);
+                const by = 3 * (p2.y - p1.y) - cy;
+                const ay = p3.y - p0.y - cy - by;
+
+                const xt = ax * (t ** 3) + bx * (t ** 2) + cx * t + p0.x;
+                const yt = ay * (t ** 3) + by * (t ** 2) + cy * t + p0.y;
+
+                return { x: xt, y: yt };
+            }
+
+            update() {
+                // Growth animation
+                if (this.growProgress < 1) {
+                    this.growProgress += GROWTH_SPEED;
+                    if (this.growProgress > 1) this.growProgress = 1;
+                }
+
+                // Bloom animation starts after stem reaches ~80%
+                if (this.growProgress > 0.8 && this.bloomProgress < 1) {
+                    this.bloomProgress += BLOOM_SPEED;
+                    if (this.bloomProgress > 1) this.bloomProgress = 1;
+                }
+            }
+
+            draw(ctx) {
+                // 1. Draw Stem
+                ctx.beginPath();
+                ctx.strokeStyle = this.stemColor;
+                ctx.lineWidth = this.thickness;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const startPoint = this.getStemPoint(0);
+                ctx.moveTo(startPoint.x, startPoint.y);
+
+                const segments = Math.floor(STEM_SEGMENTS * this.growProgress);
+                for (let i = 1; i <= segments; i++) {
+                    const t = (i / STEM_SEGMENTS) * this.growProgress;
+                    const p = this.getStemPoint(t);
+                    ctx.lineTo(p.x, p.y);
+                }
+                
+                // Last point to ensure smooth growth tip
+                const endP = this.getStemPoint(this.growProgress);
+                ctx.lineTo(endP.x, endP.y);
+                ctx.stroke();
+
+                // 2. Draw Flower
+                if (this.bloomProgress > 0) {
+                    this.drawFlower(ctx, endP.x, endP.y);
+                }
+            }
+
+            drawFlower(ctx, x, y) {
+                const scale = this.bloomProgress;
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(this.flowerRotation + Math.sin(time * 0.001 + this.phase) * 0.1);
+                ctx.scale(scale, scale);
+
+                // Petals
+                for (let i = 0; i < this.petalCount; i++) {
+                    ctx.save();
+                    ctx.rotate((Math.PI * 2 / this.petalCount) * i);
+                    
+                    const grad = ctx.createRadialGradient(0, 0, 0, 0, this.petalSize * 0.5, this.petalSize);
+                    grad.addColorStop(0, `hsl(${this.flowerHue}, 80%, 80%)`);
+                    grad.addColorStop(1, `hsl(${this.flowerHue}, 70%, 40%)`);
+                    
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    // Draw elliptical petal
+                    ctx.ellipse(0, -this.petalSize / 2, this.petalSize * this.petalWidthRatio / 2, this.petalSize / 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Center (Stamen)
+                ctx.beginPath();
+                ctx.fillStyle = `hsl(${(this.flowerHue + 40) % 360}, 90%, 50%)`;
+                ctx.arc(0, 0, this.petalSize * 0.25, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Extra sparkle/dot in center
+                ctx.beginPath();
+                ctx.fillStyle = 'white';
+                ctx.globalAlpha = 0.5;
+                ctx.arc(2, -2, this.petalSize * 0.08, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        /**
+         * Main Animation Loop
+         */
+        function animate(timestamp) {
+            time = timestamp;
+            ctx.clearRect(0, 0, width, height);
+
+            // Update and Draw each flower
+            flowers.forEach(flower => {
+                flower.update();
+                flower.draw(ctx);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        /**
+         * Interactions
+         */
+        canvas.addEventListener('mousedown', (e) => {
+            let clickX = e.clientX;
+            
+            // Avoid extreme overlapping
+            const overlapThreshold = 25;
+            flowers.forEach(f => {
+                if (Math.abs(f.startX - clickX) < overlapThreshold) {
+                    clickX += (f.startX < clickX) ? overlapThreshold : -overlapThreshold;
+                }
+            });
+
+            const newFlower = new Flower(clickX);
+            flowers.push(newFlower);
+
+            // Hide guide text
+            if (flowers.length > 0) {
+                guideText.style.opacity = '0';
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            flowers = [];
+            guideText.style.opacity = '1';
+        });
+
+        // Initialize animation
+        requestAnimationFrame(animate);
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
