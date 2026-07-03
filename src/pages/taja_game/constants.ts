@@ -1,0 +1,80 @@
+
+import { Category, SentenceData } from './types';
+
+export const SENTENCES: SentenceData[] = [
+  // 애국가 (1절~4절 및 후렴)
+  { category: Category.ANTHEM, text: '동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세' },
+  { category: Category.ANTHEM, text: '무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세' },
+  { category: Category.ANTHEM, text: '남산 위에 저 소나무 철갑을 두른 듯 바람 서리 불변함은 우리 기상일세' },
+  { category: Category.ANTHEM, text: '가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세' },
+  { category: Category.ANTHEM, text: '이 기상과 이 맘으로 충성을 다하여 괴로우나 즐거우나 나라 사랑하세' },
+  { category: Category.ANTHEM, text: '대한 사람 대한으로 길이 보전하세' },
+  { category: Category.ANTHEM, text: '무궁화 삼천리 화려 강산' },
+  { category: Category.ANTHEM, text: '하느님이 보우하사 우리나라 만세' },
+
+  // 찬송가 / 영성 문장
+  { category: Category.HYMN, text: '나 같은 죄인 살리신 주 은혜 놀라워 잃었던 생명 찾았고 광명을 얻었네' },
+  { category: Category.HYMN, text: '큰 죄악에서 건지신 주 은혜 고마워 나 처음 믿은 그 시간 귀하고 귀하다' },
+  { category: Category.HYMN, text: '주 하나님 지으신 모든 세계 내 마음 속에 그리어 볼 때' },
+  { category: Category.HYMN, text: '내 영혼 평안해 내 영혼 내 영혼 평안해' },
+  { category: Category.HYMN, text: '사랑은 언제나 오래 참고 사랑은 언제나 온유하며' },
+  { category: Category.HYMN, text: '저 높은 곳을 향하여 날마다 나아갑니다' },
+  { category: Category.HYMN, text: '복의 근원 강림하사 찬송하게 하소서' },
+  { category: Category.HYMN, text: '고요한 밤 거룩한 밤 어둠에 묻힌 밤' },
+  { category: Category.HYMN, text: '기쁘다 구주 오셨네 만백성 맞으라' },
+  { category: Category.HYMN, text: '주님 발자취를 따라가는 삶이 진정한 행복입니다' },
+
+  // 명언
+  { category: Category.QUOTES, text: '내일은 내일의 태양이 뜬다' },
+  { category: Category.QUOTES, text: '실패는 성공의 어머니이다' },
+  { category: Category.QUOTES, text: '천재는 노력하는 자를 이길 수 없고 노력하는 자는 즐기는 자를 이길 수 없다' },
+  { category: Category.QUOTES, text: '나 자신을 알라' },
+  { category: Category.QUOTES, text: '인생은 짧고 예술은 길다' },
+  { category: Category.QUOTES, text: '가장 큰 영광은 한 번도 실패하지 않음이 아니라 실패할 때마다 다시 일어나는 데 있다' },
+  { category: Category.QUOTES, text: '행복은 습관이다 그것을 몸에 익혀라' },
+  { category: Category.QUOTES, text: '꿈을 꾸는 것이 가능하다면 그 꿈을 이루는 것도 가능하다' },
+  { category: Category.QUOTES, text: '어제보다 나은 내일을 만드는 것은 오늘의 노력이다' },
+  { category: Category.QUOTES, text: '성공은 결코 최종적인 것이 아니며 실패는 결코 치명적인 것이 아니다' },
+  { category: Category.QUOTES, text: '진정한 무지는 지식을 거부하는 것이 아니라 질문하기를 멈추는 것이다' },
+  { category: Category.QUOTES, text: '시간은 우리가 가진 가장 소중한 자산이다' },
+  { category: Category.QUOTES, text: '작은 일에 정성을 다하는 사람이 큰 일도 해낼 수 있다' },
+
+  // 속담
+  { category: Category.PROVERBS, text: '가는 말이 고와야 오는 말이 곱다' },
+  { category: Category.PROVERBS, text: '등잔 밑이 어둡다' },
+  { category: Category.PROVERBS, text: '세 살 버릇 여든까지 간다' },
+  { category: Category.PROVERBS, text: '백 지 장도 맞들면 낫다' },
+  { category: Category.PROVERBS, text: '공든 탑이 무너지랴' },
+  { category: Category.PROVERBS, text: '하늘이 무너져도 솟아날 구멍은 있다' },
+  { category: Category.PROVERBS, text: '호랑이에게 물려가도 정신만 차리면 산다' },
+  { category: Category.PROVERBS, text: '시작이 반이다' },
+  { category: Category.PROVERBS, text: '낮말은 새가 듣고 밤말은 쥐가 듣는다' },
+  { category: Category.PROVERBS, text: '고래 싸움에 새우 등 터진다' },
+  { category: Category.PROVERBS, text: '돌다리도 두들겨 보고 건너라' },
+  { category: Category.PROVERBS, text: '윗물이 맑아야 아랫물이 맑다' },
+  { category: Category.PROVERBS, text: '누워서 떡 먹기' },
+  { category: Category.PROVERBS, text: '식은 죽 먹기' },
+  { category: Category.PROVERBS, text: '소 잃고 외양간 고친다' },
+
+  // 일반 문장
+  { category: Category.GENERAL, text: '오늘 날씨가 정말 화창해서 기분이 좋습니다' },
+  { category: Category.GENERAL, text: '컴퓨터 프로그래밍은 현대 사회의 필수적인 기술입니다' },
+  { category: Category.GENERAL, text: '독서는 마음의 양식이며 지혜를 넓히는 지름길입니다' },
+  { category: Category.GENERAL, text: '건강한 신체에 건전한 정신이 깃든다' },
+  { category: Category.GENERAL, text: '열심히 연습하면 누구나 타자 실력을 향상시킬 수 있습니다' },
+  { category: Category.GENERAL, text: '여행은 새로운 세상을 만나게 해주는 최고의 선물입니다' },
+  { category: Category.GENERAL, text: '인공지능 기술은 우리의 삶을 더욱 편리하게 만들어 줍니다' },
+  { category: Category.GENERAL, text: '친구와 함께하는 시간은 무엇보다 소중하고 즐겁습니다' },
+  { category: Category.GENERAL, text: '매일 조금씩 꾸준히 노력하는 자세가 성공의 열쇠입니다' },
+  { category: Category.GENERAL, text: '맛있는 음식을 먹는 것은 인생의 큰 즐거움 중 하나입니다' },
+  { category: Category.GENERAL, text: '자연을 보호하는 것은 우리의 미래를 지키는 일입니다' },
+  { category: Category.GENERAL, text: '음악은 지친 마음에 위로와 평안을 가져다줍니다' },
+  { category: Category.GENERAL, text: '여름철에는 충분한 수분 섭취와 휴식이 필요합니다' },
+  { category: Category.GENERAL, text: '가족은 우리가 힘들 때 가장 먼저 기댈 수 있는 버팀목입니다' },
+  { category: Category.GENERAL, text: '새로운 언어를 배우는 것은 새로운 세상을 여는 문과 같습니다' },
+  { category: Category.GENERAL, text: '창의적인 생각은 고정관념에서 벗어날 때 시작됩니다' },
+  { category: Category.GENERAL, text: '겸손한 마음가짐은 타인에게 존경받는 지름길입니다' },
+  { category: Category.GENERAL, text: '웃음은 만병통치약이라는 말처럼 긍정적인 마음이 중요합니다' },
+  { category: Category.GENERAL, text: '디지털 기기의 지나친 사용은 눈 건강에 해로울 수 있습니다' },
+  { category: Category.GENERAL, text: '미래는 꿈꾸는 자의 것이라는 말처럼 큰 꿈을 가지세요' }
+];

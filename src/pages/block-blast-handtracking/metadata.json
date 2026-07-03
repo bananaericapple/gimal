@@ -1,0 +1,8 @@
+{
+  "name": "Block Blast Hand Tracking",
+  "description": "8x8 Block puzzle with MediaPipe hand tracking integration.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

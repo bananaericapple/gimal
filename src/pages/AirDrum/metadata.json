@@ -1,0 +1,6 @@
+{
+  "name": "AirDrum AI",
+  "description": "손동작 기반 AI 가상 드럼 연주 시스템",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

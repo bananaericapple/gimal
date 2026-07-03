@@ -1,0 +1,5 @@
+{
+  "name": "Flappy Bird Clone",
+  "description": "A high-performance, pixel-perfect clone of the classic Flappy Bird game built with React and Tailwind CSS.",
+  "requestFramePermissions": []
+}

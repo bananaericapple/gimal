@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+@font-face {
+  font-family: 'Determination';
+  src: url('https://fonts.cdnfonts.com/s/14881/DeterminationMonoWeb.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.sansfight-page-wrapper {
+  font-family: 'Determination', 'VT323', monospace;
+  background-color: #000;
+  color: #fff;
+}
+
+.sansfight-page-wrapper .pixel-font {
+  font-family: 'Determination', 'VT323', monospace;
+}

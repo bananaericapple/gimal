@@ -7,6 +7,7 @@ export interface Website {
   tags: string[];
   linkType?: 'external' | 'internal';
   route?: string;
+  status?: 'placeholder';
 }
 
 export type NewWebsiteData = Omit<Website, 'id' | 'imageUrl' | 'linkType' | 'route'>;

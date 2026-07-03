@@ -1,0 +1,25 @@
+.hypnosis-spiral {
+  animation: spin 4s linear infinite;
+  transform-origin: center;
+}
+
+.hypnosis-spiral.spin-paused {
+  animation-play-state: paused;
+}
+
+.hypnosis-text {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.bg-radial-gradient-vignette {
+  background: radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

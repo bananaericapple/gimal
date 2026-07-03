@@ -8,10 +8,12 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
+const basename = import.meta.env.BASE_URL || '/';
+
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="/test_my_ReactProject">
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </React.StrictMode>

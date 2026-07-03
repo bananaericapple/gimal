@@ -1,0 +1,7 @@
+{
+  "name": "Super Yutnori Adventure",
+  "description": "A classic Korean board game Yutnori with AI opponents, camera avatar customization, and realistic physics-based Yut animations.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

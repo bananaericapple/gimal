@@ -1,0 +1,5 @@
+{
+  "name": "Draw Flowers",
+  "description": "An interactive canvas application where clicking generates beautiful, growing, and swaying flowers with procedural stems and petals.",
+  "requestFramePermissions": []
+}

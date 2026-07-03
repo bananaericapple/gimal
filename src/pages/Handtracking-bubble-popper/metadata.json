@@ -1,0 +1,5 @@
+{
+  "name": "Hand-Tracking Bubble Popper",
+  "description": "A fun game using MediaPipe Hand Tracking to pop bubbles with your fingers.",
+  "requestFramePermissions": ["camera"]
+}
