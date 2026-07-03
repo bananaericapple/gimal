@@ -1,11 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Website } from '../types';
-
-const HOVER_TRACKS: Record<string, string> = {
-  '/sans-fight': `${import.meta.env.BASE_URL}megalovania.mp3`,
-  '/yutnori': `${import.meta.env.BASE_URL}BGM.mp3`,
-};
 
 interface WebsiteCardProps {
   website: Website;
@@ -14,33 +9,6 @@ interface WebsiteCardProps {
 const WebsiteCard: React.FC<WebsiteCardProps> = ({ website }) => {
   const isInternal = website.linkType === 'internal' && website.route;
   const isPlaceholder = website.status === 'placeholder';
-  const hoverTrackSrc = website.route ? HOVER_TRACKS[website.route] : undefined;
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (!hoverTrackSrc) return;
-    const audio = new Audio(hoverTrackSrc);
-    audio.loop = true;
-    audioRef.current = audio;
-
-    return () => {
-      audio.pause();
-      audio.currentTime = 0;
-      audioRef.current = null;
-    };
-  }, [hoverTrackSrc]);
-
-  const handleMouseEnter = () => {
-    if (!hoverTrackSrc || !audioRef.current) return;
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch(() => {});
-  };
-
-  const handleMouseLeave = () => {
-    if (!hoverTrackSrc || !audioRef.current) return;
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-  };
 
   const Wrapper: React.ElementType = isPlaceholder ? 'div' : isInternal ? Link : 'a';
   const wrapperProps = isPlaceholder
@@ -53,8 +21,6 @@ const WebsiteCard: React.FC<WebsiteCardProps> = ({ website }) => {
     <Wrapper
       {...wrapperProps}
       className={`group block h-full ${isPlaceholder ? 'cursor-default' : ''}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <div
         className={`bg-gray-800 rounded-xl overflow-hidden shadow-lg transition-all duration-300 flex flex-col border h-full ${
